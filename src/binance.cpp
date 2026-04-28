@@ -1,5 +1,26 @@
 #include "binance.hpp"
 
+QueueHandle_t priceQueue; 
+
+void BinanceTask(void* parameters) {
+  const char* symbol = (const char*) parameters;
+
+  BinanceData data;
+
+  while (true) {
+    data.success = fetchBinancePrices(symbol, data.prices);
+
+    if (data.success) {
+      xQueueOverwrite(priceQueue, &data);
+      Serial.println("Binance prices updated.");
+    } else {
+      Serial.println("Failed to fetch Binance prices.");
+    }
+
+    vTaskDelay(60000 / portTICK_PERIOD_MS);
+  }
+}
+
 bool fetchBinancePrices(const char* symbol, float prices[24]) {
   WiFiClientSecure client;
   client.setInsecure();
@@ -11,7 +32,6 @@ bool fetchBinancePrices(const char* symbol, float prices[24]) {
 
   int httpCode = http.GET();
   if (httpCode != 200) {
-    Serial.println("Failed to get data: " + String(httpCode));
     http.end();
     return false;
   }
@@ -22,8 +42,6 @@ bool fetchBinancePrices(const char* symbol, float prices[24]) {
   JsonDocument doc;
   DeserializationError error = deserializeJson(doc, payload);
   if (error) {
-    Serial.print("deserialize Json failed: ");
-    Serial.println(error.c_str());
     return false;
   }
 
