@@ -1,26 +1,5 @@
 #include "binance.hpp"
 
-QueueHandle_t priceQueue; 
-
-void BinanceTask(void* parameters) {
-  const char* symbol = (const char*) parameters;
-
-  BinanceData data;
-
-  while (true) {
-    data.success = fetchBinancePrices(symbol, data.prices);
-
-    if (data.success) {
-      xQueueOverwrite(priceQueue, &data);
-      Serial.println("Binance prices updated.");
-    } else {
-      Serial.println("Failed to fetch Binance prices.");
-    }
-
-    vTaskDelay(60000 / portTICK_PERIOD_MS);
-  }
-}
-
 bool fetchBinancePrices(const char* symbol, float prices[24]) {
   WiFiClientSecure client;
   client.setInsecure();

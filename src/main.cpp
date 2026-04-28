@@ -2,6 +2,9 @@
 #include <wifi.hpp>
 #include "freertos/task.h"
 #include "binance.hpp"
+#include "screen.hpp"
+#include "controller.hpp"
+
 
 void setup() {
     Serial.begin(115200);
@@ -18,7 +21,16 @@ void setup() {
         NULL,
         1
     );
+
+    xTaskCreatePinnedToCore(
+        DisplayTask,
+        "DisplayT",
+        6000,
+        NULL, 
+        1,
+        NULL,
+        1
+    );
 }
 
-void loop() {
-}
+void loop() {}
