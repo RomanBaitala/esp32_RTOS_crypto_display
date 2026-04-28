@@ -13,9 +13,6 @@ struct BinanceData {
     bool success;
 };
 
-extern QueueHandle_t priceQueue;
-
-void BinanceTask(void* parameters);
 bool fetchBinancePrices(const char* symbol, float prices[24]);
 
 #endif
