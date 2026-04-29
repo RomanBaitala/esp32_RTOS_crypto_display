@@ -2,7 +2,8 @@
 #define CONFIG_HPP
 
 #include <Arduino.h>
-#include <button.hpp>
+#include "button.hpp"
+#include "screen.hpp"
 
 enum ScreenMode {
     MODE_IP,
@@ -11,7 +12,7 @@ enum ScreenMode {
 
 extern const uint8_t BTN_NEXT_PIN;
 extern const uint8_t BTN_PREV_PIN;
-extern const uint8_t BTN_LONG_PRESS_DURATION;
+extern const uint32_t BTN_LONG_PRESS_DURATION;
 extern const bool BTN_INTERNAL_PULLUP;
 
 extern Button btnNext;
@@ -23,5 +24,7 @@ extern const uint8_t totalPairs;
 extern const char* cryptoPairs[];
 
 extern volatile uint8_t currnetPairIndex;
+
+extern Screen screen;
 
 #endif
