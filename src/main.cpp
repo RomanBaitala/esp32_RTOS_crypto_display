@@ -4,6 +4,7 @@
 #include "binance.hpp"
 #include "screen.hpp"
 #include "controller.hpp"
+#include "button.hpp"
 
 
 void setup() {
