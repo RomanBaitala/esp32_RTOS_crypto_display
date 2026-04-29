@@ -19,3 +19,5 @@ const char* cryptoPairs[] = {
 };
 
 const uint8_t totalPairs = sizeof(cryptoPairs) / sizeof(cryptoPairs[0]);
+
+volatile ScreenMode currentScreenMode = MODE_PRICE;

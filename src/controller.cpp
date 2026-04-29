@@ -29,16 +29,22 @@ void DisplayTask(void* parameters) {
   BinanceData data;
 
   while(true) {
-    
+    if (currentScreenMode == MODE_IP) {
+      IPAddress ip = WiFi.localIP();
+      screen.showIP(ip);
 
-    xQueueReceive(priceQueue, &data, 0);
+      vTaskDelay(5000 / portTICK_RATE_MS);
+    } 
+    else if (currentScreenMode == MODE_PRICE) {
+      xQueueReceive(priceQueue, &data, 0);
         
-    if (data.success) {
-      const char* symbol = cryptoPairs[currnetPairIndex];
+      if (data.success) {
+        const char* symbol = cryptoPairs[currnetPairIndex];
 
-      screen.updatePrice(symbol, data.prices);
+        screen.updatePrice(symbol, data.prices);
+      }
+
+      vTaskDelay(200 / portTICK_PERIOD_MS);
     }
-    
-    vTaskDelay(200 / portTICK_PERIOD_MS);
   }
 }

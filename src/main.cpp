@@ -12,7 +12,9 @@
 void setup() {
     Serial.begin(115200);
     connectWiFi();
+
     btnNext.setShortPressCallback(onNextShortPress);
+    btnNext.setLongPressCallback(onNextLongPress);
     btnPrev.setShortPressCallback(onPrevShortPress);
 
     priceQueue = xQueueCreate(1, sizeof(BinanceData));
