@@ -3,7 +3,9 @@
 
 #include "binance.hpp"
 #include "screen.hpp"
+#include "config.hpp"
 
+extern TaskHandle_t binanceTaskHandle;
 extern QueueHandle_t priceQueue;
 
 void BinanceTask(void* parameters);

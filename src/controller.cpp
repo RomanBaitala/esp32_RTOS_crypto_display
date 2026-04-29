@@ -1,14 +1,17 @@
 #include "controller.hpp"
 
+TaskHandle_t binanceTaskHandle = NULL;
 QueueHandle_t priceQueue;
 Screen screen;
 
 void BinanceTask(void* parameters) {
-  const char* symbol = (const char*) parameters;
-
   BinanceData data;
 
   while (true) {
+    ulTaskNotifyTake(pdTRUE, (60000 / portTICK_PERIOD_MS));
+
+    const char* symbol = cryptoPairs[currnetPairIndex];
+
     data.success = fetchBinancePrices(symbol, data.prices);
 
     if (data.success) {
@@ -17,23 +20,25 @@ void BinanceTask(void* parameters) {
     } else {
       Serial.println("Failed to fetch Binance prices.");
     }
-
-    vTaskDelay(60000 / portTICK_PERIOD_MS);
   }
 }
 
 void DisplayTask(void* parameters) {
-    screen.init();
+  screen.init();
 
-    BinanceData data;
+  BinanceData data;
 
-    while(true) {
-        xQueueReceive(priceQueue, &data, 0);
-            
-        if (data.success) {
-            screen.updatePrice("BTCUSDT", data.prices);
-        }
+  while(true) {
+    
+
+    xQueueReceive(priceQueue, &data, 0);
         
-        vTaskDelay(200 / portTICK_PERIOD_MS);
+    if (data.success) {
+      const char* symbol = cryptoPairs[currnetPairIndex];
+
+      screen.updatePrice(symbol, data.prices);
     }
+    
+    vTaskDelay(200 / portTICK_PERIOD_MS);
+  }
 }
