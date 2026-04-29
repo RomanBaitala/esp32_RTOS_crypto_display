@@ -1,14 +1,21 @@
 #include <Arduino.h>
 #include <wifi.hpp>
+#include "config.hpp"
 #include "freertos/task.h"
 #include "binance.hpp"
 #include "screen.hpp"
 #include "controller.hpp"
+#include "button.hpp"
+#include "button_callback.hpp"
 
 
 void setup() {
     Serial.begin(115200);
     connectWiFi();
+
+    btnNext.setShortPressCallback(onNextShortPress);
+    btnNext.setLongPressCallback(onNextLongPress);
+    btnPrev.setShortPressCallback(onPrevShortPress);
 
     priceQueue = xQueueCreate(1, sizeof(BinanceData));
 
@@ -16,9 +23,9 @@ void setup() {
         BinanceTask,
         "BinanceT",
         12000,
-        (void*) "BTCUSDT",
-        1,
         NULL,
+        1,
+        &binanceTaskHandle,
         1
     );
 
@@ -33,4 +40,7 @@ void setup() {
     );
 }
 
-void loop() {}
+void loop() {
+    btnNext.tick();
+    btnPrev.tick();
+}
