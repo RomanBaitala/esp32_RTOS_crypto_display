@@ -2,7 +2,7 @@
 
 TaskHandle_t binanceTaskHandle = NULL;
 QueueHandle_t priceQueue;
-Screen screen;
+
 
 void BinanceTask(void* parameters) {
   BinanceData data;
@@ -42,6 +42,9 @@ void DisplayTask(void* parameters) {
         const char* symbol = cryptoPairs[currnetPairIndex];
 
         screen.updatePrice(symbol, data.prices);
+      } 
+      else {
+        screen.showStatus("Loading...", cryptoPairs[currnetPairIndex]);
       }
 
       vTaskDelay(200 / portTICK_PERIOD_MS);

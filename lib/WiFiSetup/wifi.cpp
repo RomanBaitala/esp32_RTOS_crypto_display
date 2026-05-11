@@ -7,7 +7,7 @@ const char* AP_PASSWORD = "12345678";
 
 const uint8_t DNS_PORT = 53;
 DNSServer dnsServer;
-WebServer webServer(80);
+
 
 void connectWiFi(){
   Serial.println();
@@ -60,7 +60,6 @@ void startAP() {
     webServer.send(302, "text/plain", "");
   });
 
-  webServer.begin();
   Serial.println("Captive Portal is up and redirection set!");
 }
 
