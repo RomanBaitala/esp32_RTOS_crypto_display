@@ -10,18 +10,9 @@ void onNextShortPress() {
     
     xTaskNotifyGive(binanceTaskHandle);
 }
-
 void onPrevShortPress() {
-    currentScreenMode = MODE_PRICE;
-    currnetPairIndex = (currnetPairIndex + totalPairs - 1) % totalPairs;
-
-    BinanceData data;
-    data.success = false;
-    xQueueOverwrite(priceQueue, &data);
-
-    xTaskNotifyGive(binanceTaskHandle);
+    currentScreenMode = MODE_PRICE; 
 }
-
 void onNextLongPress() {
     currentScreenMode = MODE_IP;
 }

@@ -7,11 +7,14 @@
 #include "controller.hpp"
 #include "button.hpp"
 #include "button_callback.hpp"
+#include "webServer.hpp"
 
 
 void setup() {
     Serial.begin(115200);
     connectWiFi();
+
+    initWebRoutes();
 
     btnNext.setShortPressCallback(onNextShortPress);
     btnNext.setLongPressCallback(onNextLongPress);
@@ -43,4 +46,10 @@ void setup() {
 void loop() {
     btnNext.tick();
     btnPrev.tick();
+
+    webServer.handleClient(); 
+
+    if (WiFi.getMode() == WIFI_MODE_AP) {
+        dnsServer.processNextRequest();
+    }
 }
